@@ -1,2 +1,2 @@
-rootProject.name = "kafka-multi-module-project"
+rootProject.name = "kafka"
 include("core", "consumer", "producer")

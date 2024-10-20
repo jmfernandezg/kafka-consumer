@@ -1,41 +1,44 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.3.4"
-    id("io.spring.dependency-management") version "1.1.6"
+    kotlin("jvm") version "1.8.0" // Ensure you use a compatible Kotlin version
+    kotlin("plugin.spring") version "1.8.0"
+    id("io.spring.dependency-management") version "1.1.0" // Ensure you use a compatible version
 }
 
 group = "com.jmfg"
 version = "0.0.1-SNAPSHOT"
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springframework.kafka:spring-kafka")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("org.springframework.kafka:spring-kafka-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = "io.spring.dependency-management")
 
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
+    repositories {
+        mavenCentral()
     }
-}
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+    dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.0")
+        testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.8.0")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.9.0")
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
 }

@@ -37,3 +37,9 @@ Config.toml
 hs_err_pid*
 replay_pid*
 
+.gradle
+/.idea/
+/build/
+/core/build/
+/consumer/build/
+/producer/build/

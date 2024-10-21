@@ -1,0 +1,9 @@
+# POST to /products/create
+POST http://localhost:8080/products/create
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "price": 100,
+  "quantity": 10
+}

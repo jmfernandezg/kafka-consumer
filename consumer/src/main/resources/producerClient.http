@@ -4,6 +4,8 @@ Content-Type: application/json
 
 {
   "name": "Product 1",
-  "price": 100,
-  "quantity": 10
+  "price": 150,
+  "quantity": 15,
+  "category": "Category 1",
+  "description": "Description 1"
 }

@@ -27,6 +27,11 @@ class KafkaConsumerConfiguration {
     @Value("\${spring.kafka.consumer.properties.spring.json.trusted.packages}")
     private lateinit var trustedPackages: String
 
+    @Value("\${spring.kafka.consumer.properties.spring.deserializer.key.delegate.class}")
+    private lateinit var keyDelegateClass: String
+
+    @Value("\${spring.kafka.consumer.properties.spring.deserializer.value.delegate.class}")
+    private lateinit var valueDelegateClass: String
     @Bean
     fun consumerFactory(): ConsumerFactory<String, String> {
         val props =
@@ -38,6 +43,9 @@ class KafkaConsumerConfiguration {
                         ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to
                                 Class.forName(valueDeserializer),
                         JsonDeserializer.TRUSTED_PACKAGES to trustedPackages
+                    ,
+                    "spring.deserializer.key.delegate.class" to keyDelegateClass,
+                    "spring.deserializer.value.delegate.class" to valueDelegateClass
                 )
         return DefaultKafkaConsumerFactory(props)
     }

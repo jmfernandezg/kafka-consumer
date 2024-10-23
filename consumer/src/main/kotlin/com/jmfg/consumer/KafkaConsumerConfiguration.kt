@@ -13,6 +13,7 @@ import org.springframework.kafka.core.*
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.support.serializer.JsonDeserializer
+import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
 class KafkaConsumerConfiguration {
@@ -43,6 +44,9 @@ class KafkaConsumerConfiguration {
 
     @Value("\${spring.kafka.producer.value-serializer}")
     private lateinit var valueSerializer: String
+
+    @Value("\${spring.webflux.client.base-url}")
+    private lateinit var baseUrl: String
 
 
     @Bean
@@ -80,5 +84,12 @@ class KafkaConsumerConfiguration {
             put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.forName(valueSerializer))
         }
     )
+
+    @Bean
+    fun webClient(): WebClient {
+        return WebClient.builder()
+            .baseUrl(baseUrl)
+            .build()
+    }
 
 }

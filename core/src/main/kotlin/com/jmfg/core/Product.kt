@@ -1,6 +1,5 @@
 package com.jmfg.core
 
-
 data class Product(
     val name: String,
     val price: Double,
@@ -12,7 +11,6 @@ data class ProductCreatedEvent(
     val product: Product,
     val createdAt: Long
 )
-
 
 interface ProductService {
     fun createProduct(product: Product): ProductCreatedEvent

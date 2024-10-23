@@ -85,11 +85,11 @@ class KafkaConsumerConfiguration {
         }
     )
 
+
     @Bean
     fun webClient(): WebClient {
         return WebClient.builder()
             .baseUrl(baseUrl)
             .build()
     }
-
 }

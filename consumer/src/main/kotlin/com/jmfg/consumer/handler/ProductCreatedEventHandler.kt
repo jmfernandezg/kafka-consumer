@@ -20,11 +20,11 @@ class ProductCreatedEventHandler(@Autowired private val webClient: WebClient) {
         logger.info("Handling event: $event")
         val result =
             webClient.get()
-                .uri("/products/${event.product.name}")
+                .uri("/products/${event.id}")
                 .retrieve()
                 .bodyToMono(String::class.java)
                 .doOnError {
-                    logger.error("Error while fetching product details", it)
+                    logger.error("Error while fetching product details: ${it.message}")
                     throw RetryableException("Error while fetching product details")
                 }
                 .block().also {

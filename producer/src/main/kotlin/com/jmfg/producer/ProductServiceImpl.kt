@@ -13,17 +13,15 @@ import java.util.concurrent.CompletableFuture
 class ProductServiceImpl(private val kafkaTemplate: KafkaTemplate<String, ProductCreatedEvent>) : ProductService {
     val logger: Logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
-    override fun createProduct(product: Product) : ProductCreatedEvent{
+    override fun createProduct(product: Product): ProductCreatedEvent {
 
         val productCreatedEvent = ProductCreatedEvent(
-            id = UUID.randomUUID().toString(),
-            product = product,
-            createdAt = System.currentTimeMillis()
+            id = UUID.randomUUID().toString(), product = product, createdAt = System.currentTimeMillis()
         )
 
         CompletableFuture.runAsync {
             kafkaTemplate.send("test-topic", productCreatedEvent)
-        }.whenComplete { t, u ->
+        }.whenComplete { _, u ->
             if (u != null) {
                 logger.error("Error sending message", u)
             } else {

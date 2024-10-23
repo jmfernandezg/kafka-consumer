@@ -1,5 +1,6 @@
 package com.jmfg.consumer.handler
 
+import com.jmfg.core.NonRetryableException
 import com.jmfg.core.ProductCreatedEvent
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaHandler
@@ -14,5 +15,6 @@ class ProductCreatedEventHandler {
     @KafkaHandler
     fun handle(event: ProductCreatedEvent) {
         logger.info("Handling event: $event")
+        throw NonRetryableException("Failed to handle event: $event")
     }
 }

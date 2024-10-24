@@ -9,6 +9,7 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.reactive.function.client.WebClient
 
 @Component
@@ -19,25 +20,35 @@ class ProductCreatedEventHandler(
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    @Transactional
     @KafkaHandler
     fun handle(@Payload event: ProductCreatedEvent, @Header("message-id") messageId: String) {
-        val existingEvent = productCreatedEventRepository.findById(messageId)
-        if (!existingEvent.isPresent) {
-            webClient
-                    .get()
-                    .uri("/products/${event.id}")
-                    .retrieve()
-                    .bodyToMono(String::class.java)
-                    .doOnError {
-                        logger.error(
-                                "Error while fetching product details: ${it.message}, event: $event, messageId: $messageId"
-                        )
-                        throw RetryableException("Error while fetching product details")
-                    }
-                    .block()
-                    .also {
-                        logger.info("Product details: $it, event: $event, messageId: $messageId")
-                    }
-        } else productCreatedEventRepository.save(event)
+        productCreatedEventRepository
+                .findById(messageId)
+                .ifPresentOrElse(
+                        { logger.info("Event already processed: $event, messageId: $messageId") },
+                        {
+                            webClient
+                                    .get()
+                                    .uri("/products/${event.id}")
+                                    .retrieve()
+                                    .bodyToMono(String::class.java)
+                                    .doOnError {
+                                        logger.error(
+                                                "Error while fetching product details: ${it.message}, event: $event, messageId: $messageId"
+                                        )
+                                        throw RetryableException(
+                                                "Error while fetching product details"
+                                        )
+                                    }
+                                    .block()
+                                    .also {
+                                        logger.info(
+                                                "Product details: $it, event: $event, messageId: $messageId"
+                                        )
+                                        productCreatedEventRepository.save(event)
+                                    }
+                        }
+                )
     }
 }

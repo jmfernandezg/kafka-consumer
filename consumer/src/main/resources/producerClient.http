@@ -1,11 +1,13 @@
-# POST to /products/create
+# POST to /products/create with a random UUID
 POST http://localhost:8080/products/create
 Content-Type: application/json
 
 {
-  "name": "Product 1",
+  "id": "{{uuidf}}",
+  "name": "Product 1x",
   "price": 150,
-  "quantity": 15,
-  "category": "Category 1",
-  "description": "Description 1"
+  "quantity": 15
 }
+
+### Generate UUID
+@uuid = {{uuid}}

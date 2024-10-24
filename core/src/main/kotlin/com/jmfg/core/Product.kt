@@ -1,10 +1,12 @@
 package com.jmfg.core
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
 import java.util.UUID
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.JoinColumn
 
 
 @Entity
@@ -20,6 +22,8 @@ data class Product(
 data class ProductCreatedEvent(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id: String = UUID.randomUUID().toString(),
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     val product: Product,
     val createdAt: Long
 )

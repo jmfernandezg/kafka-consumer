@@ -1,7 +1,7 @@
 plugins {
-   kotlin("jvm") version "1.8.0"
+    kotlin("jvm") version "1.8.0"
 }
 
 dependencies {
-    implementation("javax.persistence:javax.persistence-api:2.2")
+    implementation("jakarta.persistence:jakarta.persistence-api:3.0.0")
 }

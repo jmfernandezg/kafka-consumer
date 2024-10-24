@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.kafka.core.*
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.boot.autoconfigure.domain.EntityScan
 
 @Configuration
+@EnableJpaRepositories(basePackages = ["com.jmfg.core", "com.jmfg.consumer"])
+@EntityScan(basePackages = ["com.jmfg.core", "com.jmfg.consumer"])
 class KafkaConsumerConfiguration {
     @Value("\${spring.kafka.consumer.bootstrap-servers}")
     private lateinit var bootstrapServers: String

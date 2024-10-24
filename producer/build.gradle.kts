@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.0" // Ensure you use a compatible Kotlin version
-    id("org.springframework.boot") version "3.3.4"
+    id("org.springframework.boot") version "3.3.5"
     kotlin("plugin.spring")
 }
 

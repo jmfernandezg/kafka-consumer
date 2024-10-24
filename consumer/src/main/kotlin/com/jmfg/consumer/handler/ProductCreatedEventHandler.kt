@@ -8,6 +8,8 @@ import org.springframework.kafka.annotation.KafkaHandler
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.messaging.handler.annotation.Payload
+import org.springframework.messaging.handler.annotation.Header
 
 
 @Component
@@ -16,7 +18,7 @@ class ProductCreatedEventHandler(@Autowired private val webClient: WebClient) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @KafkaHandler
-    fun handle(event: ProductCreatedEvent) {
+    fun handle(@Payload event: ProductCreatedEvent, @Header("message-id") messageId: String) {
         logger.info("Handling event: $event")
         val result =
             webClient.get()

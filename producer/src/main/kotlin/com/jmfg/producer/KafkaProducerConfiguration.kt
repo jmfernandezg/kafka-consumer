@@ -35,6 +35,9 @@ class KafkaProducerConfig {
     @Value("\${spring.kafka.producer.properties.enable.idempotence}")
     private lateinit var enableIdempotence: String
 
+    @Value("\${spring.kafka.producer.transaction-id-prefix}")
+    private lateinit var transactionIdPrefix: String
+
     @Bean
     fun createTopic(): NewTopic {
         return TopicBuilder.name("product-created-events-topic")
@@ -57,6 +60,7 @@ class KafkaProducerConfig {
             put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, deliveryTimeoutMs)
             put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, requestTimeoutMs)
             put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, enableIdempotence)
+            put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, transactionIdPrefix) // Enable transactions
         }
     )
 }

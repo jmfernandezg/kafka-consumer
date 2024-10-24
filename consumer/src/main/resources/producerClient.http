@@ -3,7 +3,7 @@ POST http://localhost:8080/products/create
 Content-Type: application/json
 
 {
-  "id": "{{uuidf}}",
+  "id": "14",
   "name": "Product 1x",
   "price": 150,
   "quantity": 15
@@ -11,3 +11,4 @@ Content-Type: application/json
 
 ### Generate UUID
 @uuid = {{uuid}}
+

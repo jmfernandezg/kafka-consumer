@@ -37,7 +37,7 @@ class KafkaProducerConfig {
 
     @Bean
     fun createTopic(): NewTopic {
-        return TopicBuilder.name("test-topic")
+        return TopicBuilder.name("product-created-events-topic")
             .partitions(3)
             .replicas(3)
             .configs(mapOf("min.insync.replicas" to "2"))

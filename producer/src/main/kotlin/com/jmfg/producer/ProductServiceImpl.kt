@@ -3,11 +3,11 @@ package com.jmfg.producer
 import com.jmfg.core.Product
 import com.jmfg.core.ProductCreatedEvent
 import com.jmfg.core.ProductService
+import java.util.*
 import org.slf4j.Logger
 import org.springframework.kafka.core.KafkaTemplate
+import org.springframework.kafka.support.SendResult
 import org.springframework.stereotype.Service
-import java.util.*
-import java.util.concurrent.CompletableFuture
 
 @Service
 class ProductServiceImpl(private val kafkaTemplate: KafkaTemplate<String, ProductCreatedEvent>) : ProductService {
@@ -15,19 +15,27 @@ class ProductServiceImpl(private val kafkaTemplate: KafkaTemplate<String, Produc
 
     override fun createProduct(product: Product): ProductCreatedEvent {
 
-        val productCreatedEvent = ProductCreatedEvent(
-            id = UUID.randomUUID().toString(), product = product, createdAt = System.currentTimeMillis()
-        )
+        val productCreatedEvent =
+                ProductCreatedEvent(
+                        id = UUID.randomUUID().toString(),
+                        product = product,
+                        createdAt = System.currentTimeMillis()
+                )
 
-        CompletableFuture.runAsync {
-            kafkaTemplate.send("test-topic", productCreatedEvent)
-        }.whenComplete { _, u ->
-            if (u != null) {
-                logger.error("Error sending message", u)
-            } else {
-                logger.info("Message sent")
-            }
-        }.join()
+        val producerRecord =
+                org.apache.kafka.clients.producer.ProducerRecord(
+                        "product-created-events-topic",
+                        productCreatedEvent.id,
+                        productCreatedEvent
+                )
+        producerRecord.headers().add("message-id", UUID.randomUUID().toString().toByteArray())
+
+        val sendResult: SendResult<String, ProductCreatedEvent> =
+                kafkaTemplate.send(producerRecord).get()
+
+        logger.info(
+                "Sent message with offset: ${sendResult.recordMetadata.offset()}, partition: ${sendResult.recordMetadata.partition()}, topic: ${sendResult.recordMetadata.topic()}"
+        )
 
         return productCreatedEvent
     }

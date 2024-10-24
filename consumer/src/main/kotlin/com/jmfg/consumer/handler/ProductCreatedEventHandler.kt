@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient
 
 
 @Component
-@KafkaListener(topics = ["test-topic"])
+@KafkaListener(topics = ["product-created-events-topic"])
 class ProductCreatedEventHandler(@Autowired private val webClient: WebClient) {
     private val logger = LoggerFactory.getLogger(javaClass)
 

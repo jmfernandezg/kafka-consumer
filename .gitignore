@@ -43,3 +43,4 @@ replay_pid*
 /core/build/
 /consumer/build/
 /producer/build/
+/service/build/

@@ -72,6 +72,7 @@ class KafkaProducerConfiguration {
             .baseUrl(baseUrl)
             .build()
     }
+
     @Bean
     fun productCreatedEventsTopic(): NewTopic {
         return TopicBuilder.name(productCreatedEventsTopicName)
@@ -101,23 +102,23 @@ class KafkaProducerConfiguration {
 
     @Bean("kafkaTemplateProductCreatedEvent")
     fun kafkaTemplateProductCreatedEvent(): KafkaTemplate<String, ProductCreatedEvent> =
-        KafkaTemplate(producerFactory(ProductCreatedEvent::class.java)).apply {
+        KafkaTemplate(producerFactory<ProductCreatedEvent>()).apply {
             defaultTopic = productCreatedEventsTopicName
         }
 
     @Bean("kafkaTemplateDepositMoney")
     fun kafkaTemplateDepositMoney(): KafkaTemplate<String, DepositRequestedEvent> =
-        KafkaTemplate(producerFactory(DepositRequestedEvent::class.java)).apply {
+        KafkaTemplate(producerFactory<DepositRequestedEvent>()).apply {
             defaultTopic = depositMoneyTopicName
         }
 
     @Bean("kafkaTemplateWithdrawMoney")
     fun kafkaTemplateWithdrawMoney(): KafkaTemplate<String, WithdrawalRequestedEvent> =
-        KafkaTemplate(producerFactory(WithdrawalRequestedEvent::class.java)).apply {
+        KafkaTemplate(producerFactory<WithdrawalRequestedEvent>()).apply {
             defaultTopic = withdrawMoneyTopicName
         }
 
-    fun <T> producerFactory(valueSerializerClass: Class<T>): ProducerFactory<String, T> = DefaultKafkaProducerFactory(
+    fun <T> producerFactory(): ProducerFactory<String, T> = DefaultKafkaProducerFactory(
         HashMap<String, Any>().apply {
             put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
             put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, Class.forName(keySerializer))

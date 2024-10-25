@@ -1,6 +1,6 @@
-package com.jmfg.producer
+package com.jmfg.producer.config
 
-import com.jmfg.core.ProductCreatedEvent
+import com.jmfg.core.model.ProductCreatedEvent
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.beans.factory.annotation.Value

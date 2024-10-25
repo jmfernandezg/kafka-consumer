@@ -1,7 +1,7 @@
-package com.jmfg.producer
+package com.jmfg.producer.controller
 
-import com.jmfg.core.Product
-import com.jmfg.core.ProductService
+import com.jmfg.core.model.Product
+import com.jmfg.core.service.ProductService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

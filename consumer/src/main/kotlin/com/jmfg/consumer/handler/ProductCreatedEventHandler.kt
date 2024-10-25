@@ -1,8 +1,8 @@
 package com.jmfg.consumer.handler
 
 import com.jmfg.consumer.repository.ProductCreatedEventRepository
-import com.jmfg.core.Product
-import com.jmfg.core.ProductCreatedEvent
+import com.jmfg.core.model.Product
+import com.jmfg.core.model.ProductCreatedEvent
 import com.jmfg.core.RetryableException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -60,7 +60,7 @@ class ProductCreatedEventHandler(
             }
             .onErrorMap {
                 logger.error("Error while fetching product details: ${it.message}, event: $event, messageId: ${event.id}")
-                RetryableException("Error while fetching product details")
+                throw RetryableException("Error while fetching product details")
             }
             .block()
     }

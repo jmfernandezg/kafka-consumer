@@ -1,6 +1,9 @@
-package com.jmfg.producer
+package com.jmfg.producer.service
 
 import com.jmfg.core.*
+import com.jmfg.core.model.Product
+import com.jmfg.core.model.ProductCreatedEvent
+import com.jmfg.core.service.ProductService
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger

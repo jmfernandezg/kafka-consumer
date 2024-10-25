@@ -1,7 +1,7 @@
 package com.jmfg.consumer.config
 
 import com.jmfg.core.NonRetryableException
-import com.jmfg.core.ProductCreatedEvent
+import com.jmfg.core.model.ProductCreatedEvent
 import com.jmfg.core.RetryableException
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig

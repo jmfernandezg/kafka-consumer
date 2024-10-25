@@ -1,4 +1,4 @@
-package com.jmfg.core
+package com.jmfg.core.model
 
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -32,6 +32,3 @@ data class ProductCreatedEvent(
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
 
-interface ProductService {
-    fun createProduct(product: Product): ProductCreatedEvent
-}

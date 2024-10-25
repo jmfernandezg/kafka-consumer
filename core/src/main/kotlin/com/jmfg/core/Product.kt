@@ -1,19 +1,14 @@
 package com.jmfg.core
 
-import java.util.UUID
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.CascadeType
+import jakarta.persistence.*
+import java.util.*
 
 @Entity
 data class Product(
     @Id
     val id: String = UUID.randomUUID().toString(),
     val name: String = "",
+    val description: String = "",
     val price: Double = 0.0,
     val quantity: Int = 0
 )

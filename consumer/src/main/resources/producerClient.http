@@ -1,14 +1,12 @@
-# POST to /products/create with a random UUID
+### Constructing HMAC from request body with crypto
 POST http://localhost:8080/products/create
 Content-Type: application/json
 
 {
-  "id": "14",
-  "name": "Product 1x",
-  "price": 150,
-  "quantity": 15
+  "id": "{{$random.uuid}}",
+  "name": "Product {{$random.alphanumeric(11)}}",
+  "price": {{$random.float()}},
+  "quantity": {{$random.integer()}}
 }
 
-### Generate UUID
-@uuid = {{uuid}}
 

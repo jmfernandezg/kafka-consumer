@@ -18,8 +18,8 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.boot.autoconfigure.domain.EntityScan
 
 @Configuration
-@EnableJpaRepositories(basePackages = ["com.jmfg.core", "com.jmfg.consumer"])
-@EntityScan(basePackages = ["com.jmfg.core", "com.jmfg.consumer"])
+@EnableJpaRepositories(basePackages = ["com.jmfg.core", "com.jmfg.consumer.db"])
+@EntityScan(basePackages = ["com.jmfg.core", "com.jmfg.consumer.data"])
 class KafkaConsumerConfiguration {
     @Value("\${spring.kafka.consumer.bootstrap-servers}")
     private lateinit var bootstrapServers: String

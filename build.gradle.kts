@@ -1,11 +1,8 @@
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
-import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
-
 plugins {
-    kotlin("jvm") version "1.8.0" // Ensure you use a compatible Kotlin version
+    kotlin("jvm") version "1.8.0"
     kotlin("plugin.spring") version "1.8.0"
-    id("io.spring.dependency-management") version "1.1.0" // Ensure you use a compatible version
-    id("org.jlleitschuh.gradle.ktlint") version "11.0.0" // Add this line
+    id("io.spring.dependency-management") version "1.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
 group = "com.jmfg"

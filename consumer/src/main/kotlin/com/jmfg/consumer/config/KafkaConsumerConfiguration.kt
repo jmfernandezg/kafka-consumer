@@ -52,6 +52,9 @@ class KafkaConsumerConfiguration {
     @Value("\${spring.webflux.client.base-url}")
     private lateinit var baseUrl: String
 
+    @Value("\${spring.kafka.consumer.isolation-level}")
+    private lateinit var isolationLevel: String
+
     @Bean
     fun consumerFactory(): ConsumerFactory<String, String> = DefaultKafkaConsumerFactory(
         mapOf(
@@ -61,7 +64,8 @@ class KafkaConsumerConfiguration {
             ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to Class.forName(valueDeserializer),
             JsonDeserializer.TRUSTED_PACKAGES to trustedPackages,
             "spring.deserializer.key.delegate.class" to keyDelegateClass,
-            "spring.deserializer.value.delegate.class" to valueDelegateClass
+            "spring.deserializer.value.delegate.class" to valueDelegateClass,
+            ConsumerConfig.ISOLATION_LEVEL_CONFIG to isolationLevel
         )
     )
 

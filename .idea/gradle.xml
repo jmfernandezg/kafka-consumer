@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/consumer" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/producer" />
+            <option value="$PROJECT_DIR$/service" />
           </set>
         </option>
       </GradleProjectSettings>

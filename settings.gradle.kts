@@ -1,2 +1,2 @@
 rootProject.name = "kafka"
-include("core", "consumer", "producer")
+include("core", "consumer", "producer", "service")

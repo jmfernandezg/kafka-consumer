@@ -1,6 +1,7 @@
 package com.jmfg.producer.service
 
-import com.jmfg.core.*
+import com.jmfg.core.NonRetryableException
+import com.jmfg.core.RetryableException
 import com.jmfg.core.model.Product
 import com.jmfg.core.model.ProductCreatedEvent
 import com.jmfg.core.service.ProductService
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ProductServiceImpl(private val kafkaTemplate: KafkaTemplate<String, ProductCreatedEvent>) :
+class ProductServiceImpl(
+    private val kafkaTemplateProductCreatedEvent: KafkaTemplate<String, ProductCreatedEvent>
+) :
     ProductService {
     val logger: Logger = getLogger(this::class.java)
 
@@ -24,12 +27,12 @@ class ProductServiceImpl(private val kafkaTemplate: KafkaTemplate<String, Produc
     override fun createProduct(product: Product): ProductCreatedEvent {
         return ProductCreatedEvent(product.id, product).apply {
             ProducerRecord(
-                "product-created-events-topic",
+                kafkaTemplateProductCreatedEvent.defaultTopic,
                 id,
                 this
             ).run {
                 headers().add("message-id", id.toByteArray())
-                kafkaTemplate.send(this).get()
+                kafkaTemplateProductCreatedEvent.send(this).get()
                     .also { sendResult ->
                         logger.info(
                             "Sent message with offset: ${sendResult.recordMetadata.offset()}, partition: ${sendResult.recordMetadata.partition()}, topic: ${sendResult.recordMetadata.topic()}"

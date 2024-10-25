@@ -1,9 +1,9 @@
 package com.jmfg.consumer.handler
 
 import com.jmfg.consumer.repository.ProductCreatedEventRepository
+import com.jmfg.core.RetryableException
 import com.jmfg.core.model.Product
 import com.jmfg.core.model.ProductCreatedEvent
-import com.jmfg.core.RetryableException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.annotation.KafkaHandler

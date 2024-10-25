@@ -1,8 +1,8 @@
 package com.jmfg.consumer.config
 
 import com.jmfg.core.NonRetryableException
-import com.jmfg.core.model.ProductCreatedEvent
 import com.jmfg.core.RetryableException
+import com.jmfg.core.model.ProductCreatedEvent
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.beans.factory.annotation.Value
@@ -18,8 +18,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
-@EnableJpaRepositories(basePackages = ["com.jmfg.core", "com.jmfg.consumer.repository"])
-@EntityScan(basePackages = ["com.jmfg.core", "com.jmfg.consumer.data"])
+@EnableJpaRepositories(basePackages = ["com.jmfg.consumer.repository"])
+@EntityScan(basePackages = ["com.jmfg.core.model"])
 class KafkaConsumerConfiguration {
     @Value("\${spring.kafka.consumer.bootstrap-servers}")
     private lateinit var bootstrapServers: String

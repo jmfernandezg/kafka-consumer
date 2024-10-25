@@ -31,4 +31,3 @@ data class ProductCreatedEvent(
 
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
-

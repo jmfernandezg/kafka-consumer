@@ -10,6 +10,7 @@ import org.springframework.kafka.config.TopicBuilder
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
+import org.springframework.kafka.transaction.KafkaTransactionManager
 
 @Configuration
 class KafkaProducerConfig {
@@ -63,4 +64,9 @@ class KafkaProducerConfig {
             put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, transactionIdPrefix) // Enable transactions
         }
     )
+
+    @Bean
+    fun kafkaTransactionManager(producerFactory: ProducerFactory<String, ProductCreatedEvent>): KafkaTransactionManager<String, ProductCreatedEvent> {
+        return KafkaTransactionManager(producerFactory)
+    }
 }

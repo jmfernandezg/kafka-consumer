@@ -3,7 +3,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "senderId": {{$random.uuid}},
-  "recipientId": {{$random.uuid}},
+  "senderId": "{{$random.uuid}}",
+  "recipientId": "{{$random.uuid}}",
   "amount": {{$random.integer()}}
 }

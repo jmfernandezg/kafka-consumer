@@ -49,7 +49,7 @@ class TransferServiceImpl(
 
     fun sendDepositEventToEndpoint(depositEvent: DepositRequestedEvent) {
         webClient.post()
-            .uri("/transfer/deposit")
+            .uri("/transfers/create")
             .bodyValue(depositEvent)
             .retrieve()
             .onStatus({ !it.is2xxSuccessful }) {

@@ -13,7 +13,7 @@ data class Product(
     val price: Double = 0.0,
     val quantity: Int = 0,
     var updatedAt: LocalDateTime? = null
-){
+) {
     @PreUpdate
     fun preUpdate() {
         updatedAt = LocalDateTime.now()
@@ -28,8 +28,8 @@ data class ProductCreatedEvent(
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "product_id")
     val product: Product? = null,
-    val createdAt: LocalDateTime = LocalDateTime.now()
 
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )
 
 interface ProductService {

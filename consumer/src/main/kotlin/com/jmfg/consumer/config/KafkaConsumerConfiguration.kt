@@ -1,4 +1,4 @@
-package com.jmfg.consumer
+package com.jmfg.consumer.config
 
 import com.jmfg.core.NonRetryableException
 import com.jmfg.core.ProductCreatedEvent
@@ -6,19 +6,19 @@ import com.jmfg.core.RetryableException
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.*
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer
 import org.springframework.kafka.listener.DefaultErrorHandler
 import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.boot.autoconfigure.domain.EntityScan
 
 @Configuration
-@EnableJpaRepositories(basePackages = ["com.jmfg.core", "com.jmfg.consumer.db"])
+@EnableJpaRepositories(basePackages = ["com.jmfg.core", "com.jmfg.consumer.repository"])
 @EntityScan(basePackages = ["com.jmfg.core", "com.jmfg.consumer.data"])
 class KafkaConsumerConfiguration {
     @Value("\${spring.kafka.consumer.bootstrap-servers}")
@@ -52,7 +52,6 @@ class KafkaConsumerConfiguration {
     @Value("\${spring.webflux.client.base-url}")
     private lateinit var baseUrl: String
 
-
     @Bean
     fun consumerFactory(): ConsumerFactory<String, String> = DefaultKafkaConsumerFactory(
         mapOf(
@@ -76,7 +75,6 @@ class KafkaConsumerConfiguration {
             consumerFactory = consumerFactory()
         }
 
-
     @Bean
     fun kafkaTemplate(): KafkaTemplate<String, ProductCreatedEvent> = KafkaTemplate(producerFactory())
 
@@ -88,7 +86,6 @@ class KafkaConsumerConfiguration {
             put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Class.forName(valueSerializer))
         }
     )
-
 
     @Bean
     fun webClient(): WebClient {

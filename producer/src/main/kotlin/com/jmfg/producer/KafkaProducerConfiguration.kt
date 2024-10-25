@@ -13,7 +13,7 @@ import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.transaction.KafkaTransactionManager
 
 @Configuration
-class KafkaProducerConfig {
+class KafkaProducerConfiguration {
 
     @Value("\${spring.kafka.producer.bootstrap-servers}")
     private lateinit var bootstrapServers: List<String>

@@ -1,6 +1,6 @@
 package com.jmfg.consumer.handler
 
-import com.jmfg.consumer.db.ProductCreatedEventRepository
+import com.jmfg.consumer.repository.ProductCreatedEventRepository
 import com.jmfg.core.Product
 import com.jmfg.core.ProductCreatedEvent
 import com.jmfg.core.RetryableException
@@ -25,36 +25,45 @@ class ProductCreatedEventHandler(
 
     @Transactional
     @KafkaHandler
-    fun handle(@Payload event: ProductCreatedEvent, @Header("message-id") messageId: String) {
-        productCreatedEventRepository
-            .findById(messageId)
-            .ifPresentOrElse(
-                {
-                    logger.info("Event already processed: $event, messageId: $messageId")
-                },
-                {
-                    logger.info("Event: $event, messageId: $messageId")
-                    productCreatedEventRepository.save(event)
-                    webClient
-                        .get()
-                        .uri("/products/${event.id}")
-                        .retrieve()
-                        .bodyToMono<Product>()
-                        .doOnSuccess {
-                            logger.info("Product details fetched: $it, event: $event")
-                            event.product?.apply {
-                                name = it.name
-                                description = it.description
-                            }
-                        }
-                        .onErrorMap {
-                            logger.error("Error while fetching product details: ${it.message}, event: $event, messageId: $messageId")
-                            RetryableException("Error while fetching product details")
-                        }
-                        .block()
-                    productCreatedEventRepository.save(event)
+    fun handle(@Payload event: ProductCreatedEvent, @Header("message-id") messageId: String) =
+        if (isEventAlreadyProcessed(messageId)) {
+            logger.info("Event already processed: $event, messageId: $messageId")
+        } else {
+            processEvent(event, messageId)
+        }
 
+    private fun isEventAlreadyProcessed(messageId: String) =
+        productCreatedEventRepository.findById(messageId).isPresent
+
+    private fun processEvent(event: ProductCreatedEvent, messageId: String) =
+        event.run {
+            logger.info("Event: $this, messageId: $messageId")
+            saveEvent(this)
+            fetchAndUpdateProductDetails(this)
+            saveEvent(this)
+        }
+
+    private fun saveEvent(event: ProductCreatedEvent) {
+        productCreatedEventRepository.save(event)
+    }
+
+    private fun fetchAndUpdateProductDetails(event: ProductCreatedEvent) {
+        webClient
+            .get()
+            .uri("/products/${event.id}")
+            .retrieve()
+            .bodyToMono<Product>()
+            .doOnSuccess {
+                logger.info("Product details fetched: $it, event: $event")
+                event.product?.apply {
+                    name = it.name
+                    description = it.description
                 }
-            )
+            }
+            .onErrorMap {
+                logger.error("Error while fetching product details: ${it.message}, event: $event, messageId: ${event.id}")
+                RetryableException("Error while fetching product details")
+            }
+            .block()
     }
 }

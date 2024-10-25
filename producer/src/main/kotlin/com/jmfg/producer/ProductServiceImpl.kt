@@ -19,7 +19,7 @@ class ProductServiceImpl(private val kafkaTemplate: KafkaTemplate<String, Produc
         transactionManager = "kafkaTransactionManager"
     )
     override fun createProduct(product: Product): ProductCreatedEvent {
-        return ProductCreatedEvent(id = product.id, product = product).apply {
+        return ProductCreatedEvent(product.id, product).apply {
             ProducerRecord(
                 "product-created-events-topic",
                 id,

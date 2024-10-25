@@ -27,7 +27,7 @@ data class ProductCreatedEvent(
 
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "product_id")
-    val product: Product? = null,
+    val product: Product = Product(),
 
     val createdAt: LocalDateTime = LocalDateTime.now()
 )

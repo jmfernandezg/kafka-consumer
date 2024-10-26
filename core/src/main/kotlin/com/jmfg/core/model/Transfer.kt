@@ -13,18 +13,6 @@ data class TransferRequest(
 )
 
 @Entity
-data class WithdrawalRequestedEvent(
-    @Id
-    val id: String = UUID.randomUUID().toString(),
-
-    @OneToOne(
-        mappedBy = "withdrawalRequestedEvent",
-        cascade = [CascadeType.ALL]
-    )
-    val depositRequestedEvent: DepositRequestedEvent = DepositRequestedEvent()
-)
-
-@Entity
 data class DepositRequestedEvent(
     @Id
     val id: String = UUID.randomUUID().toString(),
@@ -35,13 +23,23 @@ data class DepositRequestedEvent(
 )
 
 @Entity
+data class WithdrawalRequestedEvent(
+    @Id
+    val id: String = UUID.randomUUID().toString(),
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "deposit_request_event_id")
+    val depositRequestedEvent: DepositRequestedEvent = DepositRequestedEvent()
+)
+
+@Entity
 data class Transfer(
     @Id
     val id: String = UUID.randomUUID().toString(),
 
-    @OneToOne
-    @JoinColumn(name = "deposit_requested_event_id")
-    val depositRequestedEvent: DepositRequestedEvent = DepositRequestedEvent(),
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "withdrawal_request_event_id")
+    val withdrawalRequestedEvent: WithdrawalRequestedEvent = WithdrawalRequestedEvent(),
 
     var comment: String? = null
 )

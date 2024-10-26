@@ -6,20 +6,15 @@ import com.jmfg.core.model.WithdrawalRequestedEvent
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.kafka.config.TopicBuilder
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.transaction.KafkaTransactionManager
-import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
-@EnableJpaRepositories(basePackages = ["com.jmfg.producer.repository"])
-@EntityScan(basePackages = ["com.jmfg.core.model"])
 class KafkaProducerConfiguration {
 
     @Value("\${spring.kafka.producer.bootstrap-servers}")
@@ -60,16 +55,6 @@ class KafkaProducerConfiguration {
 
     @Value("\${spring.kafka.topic.withdraw-money}")
     private lateinit var withdrawMoneyTopicName: String
-
-    @Value("\${spring.webflux.client.base-url}")
-    private lateinit var baseUrl: String
-
-    @Bean
-    fun webClient(): WebClient {
-        return WebClient.builder()
-            .baseUrl(baseUrl)
-            .build()
-    }
 
     @Bean
     fun productCreatedEventsTopic(): NewTopic {
@@ -136,8 +121,13 @@ class KafkaProducerConfiguration {
         return KafkaTransactionManager(producerFactory<ProductCreatedEvent>())
     }
 
-    @Bean("kafkaTransactionManagerAny")
-    fun kafkaTransactionManagerAny(): KafkaTransactionManager<String, Any> {
-        return KafkaTransactionManager(producerFactory<Any>())
+    @Bean("kafkaTransactionManagerWithdrawalRequestedEvent")
+    fun kafkaTransactionManagerWithdrawalRequestedEvent(): KafkaTransactionManager<String, WithdrawalRequestedEvent> {
+        return KafkaTransactionManager(producerFactory<WithdrawalRequestedEvent>())
+    }
+
+    @Bean("kafkaTransactionManagerDepositRequestedEvent")
+    fun kafkaTransactionManagerDepositRequestedEvent(): KafkaTransactionManager<String, DepositRequestedEvent> {
+        return KafkaTransactionManager(producerFactory<DepositRequestedEvent>())
     }
 }

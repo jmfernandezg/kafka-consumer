@@ -3,6 +3,7 @@ package com.jmfg.producer.service
 import com.jmfg.core.NonRetryableException
 import com.jmfg.core.TransferServiceException
 import com.jmfg.core.model.DepositRequestedEvent
+import com.jmfg.core.model.Transfer
 import com.jmfg.core.model.TransferRequest
 import com.jmfg.core.model.WithdrawalRequestedEvent
 import com.jmfg.core.service.TransferService
@@ -46,6 +47,8 @@ class TransferServiceImpl(
             withdrawalRequestedEventRepository.save(withdrawalEvent)
 
             sendEventToEndpoint(withdrawalEvent.id)
+
+            transferRepository.save(Transfer(id = withdrawalEvent.id, withdrawalRequestedEvent = withdrawalEvent))
         }
         return true
     }

@@ -1,39 +1,47 @@
 package com.jmfg.core.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.util.*
+
+@Entity
+data class TransferRequest(
+    @Id
+    val id: String = UUID.randomUUID().toString(),
+    val senderId: String = "",
+    val recipientId: String = "",
+    val amount: Double = 0.0
+)
+
+@Entity
+data class WithdrawalRequestedEvent(
+    @Id
+    val id: String = UUID.randomUUID().toString(),
+
+    @OneToOne(
+        mappedBy = "withdrawalRequestedEvent",
+        cascade = [CascadeType.ALL]
+    )
+    val depositRequestedEvent: DepositRequestedEvent = DepositRequestedEvent()
+)
+
+@Entity
+data class DepositRequestedEvent(
+    @Id
+    val id: String = UUID.randomUUID().toString(),
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "transfer_request_id")
+    val transferRequest: TransferRequest = TransferRequest()
+)
 
 @Entity
 data class Transfer(
     @Id
-    val transferId: String = UUID.randomUUID().toString(),
-    val senderId: String = "",
-    val recipientId: String = "",
-    val amount: Double = 0.0,
+    val id: String = UUID.randomUUID().toString(),
+
+    @OneToOne
+    @JoinColumn(name = "deposit_requested_event_id")
+    val depositRequestedEvent: DepositRequestedEvent = DepositRequestedEvent(),
+
     var comment: String? = null
-)
-
-data class TransferRequest(
-    val senderId: String,
-    val recipientId: String = "",
-    val amount: Double
-) {
-    fun toTransfer(): Transfer {
-        return Transfer(
-            senderId = this.senderId,
-            recipientId = this.recipientId,
-            amount = this.amount
-        )
-    }
-}
-
-data class WithdrawalRequestedEvent(
-    val id: String = UUID.randomUUID().toString(),
-    val transferRequest: TransferRequest
-)
-
-data class DepositRequestedEvent(
-    val id: String = UUID.randomUUID().toString(),
-    val transferRequest: TransferRequest
 )

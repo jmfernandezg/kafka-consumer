@@ -21,7 +21,10 @@ class ProductController {
         val count = invocationCounts.merge(id, 1, Int::plus) ?: 1
 
         if (!id.last().isDigit() && count < 3) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "ID must end in a number")
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "ID must end in a number or try ${3 - count} more times :wink: 😊"
+            )
         }
 
         return Product(

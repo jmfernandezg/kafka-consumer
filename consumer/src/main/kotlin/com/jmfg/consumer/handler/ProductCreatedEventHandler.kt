@@ -50,6 +50,4 @@ class ProductCreatedEventHandler(
                 logger.error("Error while fetching product details: ${it.message}, event: $event")
                 throw RetryableException("Error while fetching product details")
             }.block()
-
-
 }

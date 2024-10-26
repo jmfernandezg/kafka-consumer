@@ -8,7 +8,10 @@ import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 
 @Component
-@KafkaListener(topics = ["deposit-money-topic"], containerFactory = "kafkaListenerContainerFactory")
+@KafkaListener(
+    topics = ["deposit-money-topic"],
+    containerFactory = "kafkaListenerContainerFactory"
+)
 class DepositRequestedEventHandler {
     private val logger = getLogger(this.javaClass)
 

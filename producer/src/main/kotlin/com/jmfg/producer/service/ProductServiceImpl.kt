@@ -7,12 +7,15 @@ import com.jmfg.core.model.ProductCreatedEvent
 import com.jmfg.core.service.ProductService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.reactive.function.client.WebClient
 
 @Service
 class ProductServiceImpl(
+    @Autowired private val webClient: WebClient,
     private val kafkaTemplateProductCreatedEvent: KafkaTemplate<String, ProductCreatedEvent>
 ) :
     ProductService {

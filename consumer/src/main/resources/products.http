@@ -35,3 +35,16 @@ Content-Type: application/json
   "price": 0,
   "quantity": 0
 }
+
+
+### POST /products/create that returns 404 to Consumer
+
+POST http://localhost:8080/products/create
+Content-Type: application/json
+
+{
+  "id": "B",
+  "name": "Product",
+  "price": 0,
+  "quantity": 0
+}

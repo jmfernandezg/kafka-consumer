@@ -8,7 +8,10 @@ import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 
 @Component
-@KafkaListener(topics = ["withdraw-money-topic"], containerFactory = "kafkaListenerContainerFactory")
+@KafkaListener(
+    topics = ["withdraw-money-topic"],
+    containerFactory = "kafkaListenerContainerFactory"
+)
 class WithdrawalRequestedEventHandler {
     private val logger = getLogger(this.javaClass)
 

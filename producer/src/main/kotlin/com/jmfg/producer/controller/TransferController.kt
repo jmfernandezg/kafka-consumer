@@ -12,7 +12,5 @@ import org.springframework.web.bind.annotation.RestController
 class TransferController(private val transferService: TransferService) {
 
     @PostMapping("/request")
-    fun transfer(@RequestBody transferRequest: TransferRequest): Boolean {
-        return transferService.transfer(transferRequest)
-    }
+    fun transfer(@RequestBody transferRequest: TransferRequest): Boolean = transferService.transfer(transferRequest)
 }

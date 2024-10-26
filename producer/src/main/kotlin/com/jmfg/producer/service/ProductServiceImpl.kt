@@ -5,7 +5,6 @@ import com.jmfg.core.RetryableException
 import com.jmfg.core.model.Product
 import com.jmfg.core.model.ProductCreatedEvent
 import com.jmfg.core.service.ProductService
-import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.kafka.core.KafkaTemplate
@@ -20,25 +19,23 @@ class ProductServiceImpl(
     val logger: Logger = getLogger(this::class.java)
 
     @Transactional(
+        transactionManager = "kafkaTransactionManagerProductCreatedEvent",
         rollbackFor = [NonRetryableException::class],
-        noRollbackFor = [RetryableException::class],
-        transactionManager = "kafkaTransactionManager"
+        noRollbackFor = [RetryableException::class]
     )
     override fun createProduct(product: Product): ProductCreatedEvent {
-        return ProductCreatedEvent(product.id, product).apply {
-            ProducerRecord(
-                kafkaTemplateProductCreatedEvent.defaultTopic,
-                id,
-                this
-            ).run {
-                headers().add("message-id", id.toByteArray())
-                kafkaTemplateProductCreatedEvent.send(this).get()
-                    .also { sendResult ->
-                        logger.info(
-                            "Sent message with offset: ${sendResult.recordMetadata.offset()}, partition: ${sendResult.recordMetadata.partition()}, topic: ${sendResult.recordMetadata.topic()}"
-                        )
-                    }
+        val event = ProductCreatedEvent(product.id, product)
+
+        kafkaTemplateProductCreatedEvent.executeInTransaction {
+            it.sendDefault(event)
+        }.whenComplete { result, exception ->
+            if (exception != null) {
+                logger.error("Failed to send message", exception)
+                throw NonRetryableException(exception.message)
             }
-        }
+            logger.info("Sent message to topic ${result.recordMetadata.topic()} with offset ${result.recordMetadata.offset()}")
+        }.join()
+
+        return event
     }
 }

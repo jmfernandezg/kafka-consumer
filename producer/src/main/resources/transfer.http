@@ -1,9 +1,36 @@
+### POST that will randomly fail with 404 or 200
+
 POST http://localhost:8080/transfers/request HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 
 {
   "senderId": "{{$random.uuid}}",
+  "recipientId": "{{$random.uuid}}",
+  "amount": {{$random.integer()}}
+}
+
+
+### POST with ID ending in digit will get a 200
+
+POST http://localhost:8080/transfers/request HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "senderId": "182f1962-4562-4541-932f-d470809892b{{$random.integer()}}",
+  "recipientId": "{{$random.uuid}}",
+  "amount": {{$random.integer()}}
+}
+
+### POST with ID ending in character will get a 404
+
+POST http://localhost:8080/transfers/request HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "senderId": "182f1962-4562-4541-932f-d470809892b4{{$random.alphabetic}}",
   "recipientId": "{{$random.uuid}}",
   "amount": {{$random.integer()}}
 }

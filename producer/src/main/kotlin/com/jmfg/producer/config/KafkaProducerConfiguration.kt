@@ -3,7 +3,6 @@ package com.jmfg.producer.config
 import com.jmfg.core.model.DepositRequestedEvent
 import com.jmfg.core.model.ProductCreatedEvent
 import com.jmfg.core.model.WithdrawalRequestedEvent
-import jakarta.persistence.EntityManagerFactory
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.beans.factory.annotation.Value
@@ -16,7 +15,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 import org.springframework.kafka.transaction.KafkaTransactionManager
-import org.springframework.orm.jpa.JpaTransactionManager
 import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
@@ -133,13 +131,13 @@ class KafkaProducerConfiguration {
         }
     )
 
-    @Bean
-    fun kafkaTransactionManager(producerFactory: ProducerFactory<String, Any>): KafkaTransactionManager<String, Any> {
-        return KafkaTransactionManager(producerFactory)
+    @Bean("kafkaTransactionManagerProductCreatedEvent")
+    fun kafkaTransactionManager(): KafkaTransactionManager<String, ProductCreatedEvent> {
+        return KafkaTransactionManager(producerFactory<ProductCreatedEvent>())
     }
 
-    @Bean("transactionManager")
-    fun jpaTransactionManager(entityManagerFactory: EntityManagerFactory): JpaTransactionManager {
-        return JpaTransactionManager(entityManagerFactory)
+    @Bean("kafkaTransactionManagerAny")
+    fun kafkaTransactionManagerAny(): KafkaTransactionManager<String, Any> {
+        return KafkaTransactionManager(producerFactory<Any>())
     }
 }

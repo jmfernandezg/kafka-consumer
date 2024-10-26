@@ -1,0 +1,37 @@
+### POST /products/create that returns 404 to Consumer
+
+POST http://localhost:8080/products/create
+Content-Type: application/json
+
+{
+  "id": "182f1962-4562-4541-932f-d470809892b4{{$random.alphabetic(5)}}",
+  "name": "Product {{$random.alphabetic(10)}}",
+  "price": {{$random.float()}},
+  "quantity": {{$random.integer()}}
+}
+
+### POST /products/create that returns 200 to Consumer
+
+POST http://localhost:8080/products/create
+Content-Type: application/json
+
+{
+  "id": "182f1962-4562-4541-932f-d470809892b{{$random.integer(5)}}",
+  "name": "Product {{$random.alphabetic(10)}}",
+  "price": {{$random.float()}},
+  "quantity": {{$random.integer()}}
+}
+
+
+
+### POST /products/create that returns 200 to Consumer
+
+POST http://localhost:8080/products/create
+Content-Type: application/json
+
+{
+  "id": "1",
+  "name": "Product",
+  "price": 0,
+  "quantity": 0
+}

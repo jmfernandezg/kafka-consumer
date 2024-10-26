@@ -24,7 +24,7 @@ class TransferServiceImpl(
 ) : TransferService {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-    @Transactional("transactionManager")
+    @Transactional(transactionManager = "kafkaTransactionManagerAny")
     override fun transfer(transferRequest: TransferRequest): Boolean {
         logger.info("Processing transfer request: $transferRequest")
         saveTransfer(transferRequest.toTransfer())

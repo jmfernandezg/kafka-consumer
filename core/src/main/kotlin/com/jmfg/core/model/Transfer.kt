@@ -11,6 +11,7 @@ data class Transfer(
     val senderId: String = "",
     val recipientId: String = "",
     val amount: Double = 0.0,
+    var comment: String? = null
 )
 
 data class TransferRequest(
